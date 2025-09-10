@@ -90,6 +90,6 @@ resource "aws_s3_object" "files" {
 resource "aws_s3_object" "title" {
   bucket = aws_s3_bucket.s3_bucket.id
   key = "title"
-  content = "Set from Terraform"
+  content = var.title
   content_type = "text/plain"
 }
