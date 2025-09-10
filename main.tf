@@ -86,3 +86,10 @@ resource "aws_s3_object" "files" {
   etag         = filemd5("www/${each.key}")
   content_type = local.filetypes[split(".", each.key)[1]]
 }
+
+resource "aws_s3_object" "title" {
+  bucket = aws_s3_bucket.s3_bucket.id
+  key = "title"
+  content = "Set from Terraform"
+  content_type = "text/plain"
+}

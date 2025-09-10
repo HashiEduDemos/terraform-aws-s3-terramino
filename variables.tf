@@ -9,3 +9,12 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "title" {
+  description = "Title of the website to show"
+  type = string
+  validation {
+    condition = length(var.title) > 0 && length(var.title) <= 25
+    error_message = "Title must be between 1-25 characters."
+  }
+}

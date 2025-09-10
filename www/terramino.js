@@ -5,8 +5,20 @@ var newHighScore = false;
 const SCORE_NEWTETROMINO = 10;
 const SCORE_CLEARLINE = 100;
 
+setTitle();
 updateScore();
-getHighScore();
+// getHighScore();
+
+async function setTitle() {
+  const getTitleData = await fetch("/title");
+  newTitle = "Terramino"
+
+  if (getTitleData.ok) {
+    newTitle = await getTitleData.text();
+  }
+
+  document.getElementsByClassName("game-title")[0].innerText = newTitle;
+}
 
 function updateScore() {
   const scoreSpan = document.getElementById("score");
@@ -32,7 +44,7 @@ async function getHighScore() {
 
   const getScoreData = await fetch("/score");
 
-  if (response.ok) {
+  if (getScoreData.ok) {
     highScore = await getScoreData.text();
   } else {
     highScore = "000000"
@@ -466,37 +478,3 @@ function hardDrop() {
 
 // Start game
 rAF = requestAnimationFrame(loop);
-
-// Ensure the modal is hidden by default
-window.onload = function () {
-  const debugModal = document.getElementById("debug-modal");
-  debugModal.style.display = "none"; // Ensure it's hidden on page load
-
-  const modeToggle = document.getElementById("mode-toggle");
-  modeToggle.addEventListener("click", () => {
-    document.body.classList.toggle("light-mode");
-    updateColors();
-  });
-};
-
-// Event listener for the Debug button
-document.getElementById("debug-button").addEventListener("click", async () => {
-  const debugModal = document.getElementById("debug-modal");
-  const debugInfo = document.getElementById("debug-info");
-
-  // Fetch the data from /env and /redis endpoints
-  const envData = await fetch("/env").then((res) => res.text());
-  const redisData = await fetch("/redis").then((res) => res.text());
-
-  // Update the modal content with fetched data
-  debugInfo.textContent = `Env Info:\n${envData}\nRedis Info:\n${redisData}`;
-
-  // Show the modal only when the button is clicked
-  debugModal.style.display = "block";
-});
-
-// Event listener for the Close button inside the modal
-document.getElementById("close-debug").addEventListener("click", () => {
-  const debugModal = document.getElementById("debug-modal");
-  debugModal.style.display = "none"; // Hide the modal when Close is clicked
-});
